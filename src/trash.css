@@ -1,0 +1,330 @@
+.Navbar {
+    width: 100%;
+    height: 55px;
+    border-bottom: 2px solid #f1f1f1;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    /* justify-content: flex-start; */
+  
+    font-size: 17px;
+  }
+  
+  .logo {
+    padding: 15px 0;
+  }
+  
+  .linkslist {
+    list-style: none;
+    display: flex;
+    /* flex-flow: row nowrap; */
+  }
+  
+  .linkproducttype {
+    padding: 18px 10px;
+  }
+  
+  @media (max-width: 900px) {
+  
+  }
+  
+  
+  .linkslist {
+    /* display: none; */
+    display: flex;
+    flex-flow: column nowrap;
+    /* justify-content: flex-start;
+    align-self: flex-start; */
+  
+    background-color: #0D2538;
+    position: fixed;
+    /* transform: ; */
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 300px;
+    padding-top: 3.5rem;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .linkproducttype {
+    color: white
+  }
+  
+  
+  
+  .Burger {
+    /* display: flex;
+    justify-content: flex-start;
+    align-self: flex-start; */
+  
+  
+    width: 2rem;
+    height: 2rem;
+    position: fixed;
+    top: 15px;
+    right: 20px;
+    /* display: flex;
+    justify-content: space-around;
+    flex-flow: column nowrap; */
+    z-index: 20;
+    /* display: none; */
+  
+  
+  
+  }
+  
+  /* @media (max-width: 900px) {
+    .Burger {
+      display: flex;
+      justify-content: space-around;
+      flex-flow: column nowrap;
+    }
+  } */
+  
+  
+  .Burger {
+    display: flex;
+    justify-content: space-around;
+    flex-flow: column nowrap;
+    /* justify-content: flex-start; */
+    /* align-self: flex-start; */
+  }
+  
+  
+  
+  .burgclose {
+    width: 2rem;
+    height: 0.25rem;
+    background-color: #333;
+    border-radius: 10px;
+    transform-origin: 1px;
+    /* make transition slower */
+    transition: all 0.3s linear;
+  }
+  
+  .burgclose:nth-child(1) {
+    transform: rotate(0);
+  }
+  
+  .burgclose:nth-child(2) {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  
+  .burgclose:nth-child(3) {
+    transform: rotate(0);
+  }
+  
+  .burgopen {
+    width: 2rem;
+    height: 0.25rem;
+    background-color: #ccc; 
+    border-radius: 10px;
+    transform-origin: 1px;
+    /* make transition slower */
+    transition: all 0.3s linear;
+  }
+  
+  .burgopen:nth-child(1) {
+    transform: rotate(45deg);
+  }
+  
+  .burgopen:nth-child(2) {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  
+  .burgopen:nth-child(3) {
+    transform: rotate(-45deg);
+  }
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /* Dropdown */
+.dropdown {
+  display: inline-block;
+  position: relative;
+}
+
+.dropdownbutton {
+  background-color: red;
+  padding: 10px;
+}
+
+.dropdown-content {
+  position: absolute;
+  /* wont display by default: */
+  display: none;
+  right: 0;
+  min-width: 12rem;
+  padding: 1rem;
+  z-index: 1;
+  background-color: #203040;
+  margin: 0;
+  margin-top: 0.4rem;
+  border-radius: 0.5rem;
+}
+
+/* when user move mouse over the link */
+.dropdown:hover .dropdown-content {
+  /* diplay: none, will be converted to BLOCK, so u will see the dropdown menu */
+  display: block;
+}
+  
+
+
+
+
+
+
+
+
+
+.Burger {
+  width: 2rem;
+  /* height: 2rem; */
+  height: 1.8rem;
+  position: fixed;
+  z-index: 20;
+  display: grid;
+  /* justify-items: start; */
+  /* align-items: center; */
+  align-items: start;
+  margin: -12px 0px 0px 0px;
+
+}
+
+/* @media (max-width: 900px) {
+  .Burger {
+    display: flex;
+    justify-content: space-around;
+    flex-flow: column nowrap;
+  }
+} */
+
+
+.burgclose {
+  /* display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-row-gap: 0px; */
+
+  width: 1.9rem;
+  height: 0.25rem;
+  /* padding: 0px 0px 20px 0px; */
+  background-color: #333;
+  border-radius: 10px;
+  transform-origin: 1px;
+  /* make transition slower */
+  transition: all 0.3s linear;
+
+}
+
+.burgclose:nth-child(1) {
+  transform: rotate(0);
+}
+
+.burgclose:nth-child(2) {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.burgclose:nth-child(3) {
+  transform: rotate(0);
+}
+
+.burgopen {
+  /* width: 2rem; */
+  /* height: 0.25rem; */
+  width: 1.8rem;
+  height: 0.25rem;
+
+    /* padding: 0px 0px 20px 0px; */
+
+  background-color: #ccc; 
+  border-radius: 10px;
+  transform-origin: 1px;
+  /* make transition slower */
+  transition: all 0.15s linear;
+
+  /* display: grid; */
+  /* align-items: center; */
+    margin: -18px 0px 0px 3px;
+
+}
+
+.burgopen:nth-child(1) {
+  transform: rotate(45deg);
+    /* margin: 20px 0px 0px 0px; */
+
+}
+
+.burgopen:nth-child(2) {
+  transform: translateX(100%);
+  opacity: 0;
+  /* margin: 0px 0px 20px 0px; */
+
+}
+
+.burgopen:nth-child(3) {
+  transform: rotate(-45deg);
+  /* margin: 0px 20px 0px 0px; */
+
+}
+
+
+
+
+
+.linkslist {
+  list-style: none;
+  /* text-decoration: none; */
+  background-color: #97c98b;
+  position: fixed;
+  /* top: 0;
+  right: 0; */
+  top: 0;
+  left: 0;
+  /* left: 0px;
+  right: 0px; */
+  height: 100vh;
+  width: 180px;
+  padding-top: 3.5rem;
+  transition: transform 0.3s ease-in-out;
+
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: auto auto;
+}
+
+.linkproducttype {
+  color: white;
+  padding: 18px 10px;
+  text-decoration: none;
+}
+
+.sidenavbottomlinkscontainer {
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: auto;
+  padding: 0px 0px 10px 10px;
+  /* text-decoration: none; */
+}
+
+.sidenavbottomlinks{
+  text-decoration: none;
+  /* padding-top: 10px; */
+  /* margin: 0px 0px 20px 0px; */
+}

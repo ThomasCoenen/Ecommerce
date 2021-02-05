@@ -1,0 +1,268 @@
+import React, { useEffect, useState, useRef } from 'react';
+import Axios from 'axios';
+
+// import {PayPalButton} from 'react-paypal-button-v2';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { detailsOrder, payOrder } from '../actions/orderActions';
+import LoadingBox from '../components/LoadingBox';
+import MessageBox from '../components/MessageBox';
+import Paypal from './Paypal';
+import { ORDER_PAY_RESET } from '../constants/orderConstants';
+
+
+export default function OrderScreen(props) {
+
+    //state if ur going to checkout or not
+    const [checkout, setCheckout] = useState(false);
+
+    //grab paypal button from index.html. access from useRef
+    const paypal = useRef()
+
+    //hook to get status of paypal SDK
+    // const [sdkReady, setSdkReady] = useState(false);
+
+
+    const orderId = props.match.params.id;
+    const orderDetails = useSelector((state) => state.orderDetails);
+    const { order, loading, error } = orderDetails;
+
+    //get orderPay from redux
+    const orderPay = useSelector((state) => state.orderPay);
+    //rename error to errorPay
+    const {
+        loading: loadingPay,
+        error: errorPay, 
+        success: successPay,
+    } = orderPay;
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        // dispatch(detailsOrder(orderId));
+        // const addPayPalScript = async () => {
+        //     const { data } = await Axios.get('/api/config/paypal');
+        //     // const { data } = await Axios.get('/config/paypal');
+
+        //     const script = document.createElement('script');
+        //     script.type = 'text/javascript';
+        //     script.src = `https://www.paypal.com/sdk/js?client-id=${data}`;
+        //     script.async = true;
+        //     script.onload = () => {
+        //       setSdkReady(true);
+        //     };
+        //     document.body.appendChild(script);
+        //   };
+        //   if (!order) {
+        //     dispatch(detailsOrder(orderId));
+        //   } else {
+        //     if (!order.isPaid) {
+        //       if (!window.paypal) {
+        //         addPayPalScript();
+        //       } else {
+        //         setSdkReady(true);
+        //       }
+        //     }
+        //   }
+
+
+        //if order not found or successPay true, refresh page so need to
+        //run DetailsOrder again to get new Status of order (Paid or not).
+        //Another condition
+        //or order exists but order._id =! orderId(order in 
+        //the URL). In this situation need to refresh the page, and update 
+        //the page based on the new order
+        if (!order || successPay || (order && order._id !== orderId)) {
+            //reset orderPay to get rid of infinite loop
+            dispatch({type: ORDER_PAY_RESET});
+            dispatch(detailsOrder(orderId));
+          } else {
+            if (!order.isPaid) {
+              if (!window.paypal) {
+                // addPayPalScript();
+                return (
+                    <Paypal />
+                )
+                
+              } else {
+                // setSdkReady(true);
+                setCheckout(true);
+                // setCheckout(false);
+
+              }
+            }
+          }
+
+        //   if (order.isPaid === true) {
+        //     window.location.reload();
+        //   }
+
+
+
+    // }, [dispatch, order]);
+
+    }, [dispatch, order, orderId, checkout, successPay]);
+
+    // }, [dispatch, order, orderId, sdkReady]);
+
+
+    // const successPaymentHandler = (paymentResult) => {
+    //     //dispatch payorder action
+    //     //paymentResult is the reuslt of ur payment on paypal
+    //     dispatch(payOrder(order, paymentResult))
+    // }
+
+    // const setCheckout = () => {
+    //     if (successPay) {
+
+    //     }
+    // }
+
+
+    return loading ? (
+    <LoadingBox></LoadingBox>
+    ) : error ? (
+    <MessageBox variant="danger">{error}</MessageBox>
+    ) : (
+    <div className="orderscreen">
+        <h1 style={{textAlign: "center"}}>Order {order._id}</h1>
+        <div className="placeorderscreen">
+            <div className="col-2 orderleft">
+                <ul>
+                    <li>
+                        <div className="card card-body">
+                        <h2>Shipping</h2>
+                        <p>
+                            <strong>Name:</strong> {order.shippingAddress.fullName} <br />
+                            <strong>Address: </strong> {order.shippingAddress.address},
+                            {order.shippingAddress.city},{' '}
+                            {order.shippingAddress.postalCode},
+                            {order.shippingAddress.country}
+                        </p>
+                        {order.isDelivered ? (
+                            <MessageBox variant="success">
+                            Delivered at {order.deliveredAt}
+                            </MessageBox>
+                        ) : (
+                            <MessageBox variant="danger">Not Delivered</MessageBox>
+                        )}
+                        </div>
+                    </li>
+                    <li>
+                        <div className="card card-body">
+                        <h2>Payment</h2>
+                        <p>
+                            <strong>Method:</strong> {order.paymentMethod}
+                        </p>
+                        {order.isPaid ? (
+                            <MessageBox variant="success">
+                                Paid at {order.paidAt}
+                            </MessageBox>
+                        ) : (
+                            <MessageBox variant="danger">Not Paid</MessageBox>
+                        )}
+                        </div>
+                    </li>
+                    <li>
+                        <div className="card card-body">
+                        <h2>Order Items</h2>
+                            <ul style={{listStyle: "none"}}>
+                                {order.orderItems.map((item) => (
+                                <li key={item.product}>
+                                    <div className="row">
+                                    <div>
+                                        <img
+                                        src={item.image}
+                                        alt={item.name}
+                                        className="small"
+                                        ></img>
+                                    </div>
+                                    <div className="min-30">
+                                        <Link to={`/product/${item.product}`}>
+                                        {item.name}
+                                        </Link>
+                                    </div>
+
+                                    <div>
+                                        {item.qty} x ${item.price} = ${item.qty * item.price}
+                                    </div>
+                                    </div>
+                                </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div className="col-1">
+                <div className="card card-body">
+                    <ul style={{listStyle: "none"}}>
+                        <li>
+                            <h2>Order Summary</h2>
+                        </li>
+                        <li>
+                            <div className="row">
+                                <div>Items</div>
+                                <div>${order.itemsPrice.toFixed(2)}</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div className="row">
+                                <div>Shipping</div>
+                                <div>${order.shippingPrice.toFixed(2)}</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div className="row">
+                                <div>Tax</div>
+                                <div>${order.taxPrice.toFixed(2)}</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div className="row">
+                                <div>
+                                    <strong> Order Total</strong>
+                                </div>
+                                <div>
+                                    <strong>${order.totalPrice.toFixed(2)}</strong>
+                                </div>
+                            </div>
+                        </li>
+
+
+
+                        {
+                            //if ur on checkout page render paypal comp
+                            checkout ? (
+                                <>
+                                    {errorPay && (<MessageBox variant="danger">{errorPay}</MessageBox>)}
+                                    
+                                    {loadingPay && <LoadingBox></LoadingBox>}
+
+                                    <Paypal 
+                                        order={order}
+                                        // checkout={checkout}
+                                        // setCheckout={setCheckout}
+                                        // disabled={order.isPaid} 
+                                        // onSuccess={successPaymentHandler}
+                                    />
+                                </>
+                            ) : (
+                            // else render paypal checkout button 
+                            <button
+                                // when u click button go to checkout page
+                                onClick={() => setCheckout(true)}
+                                disabled={order.isPaid} //disable button if order isPaid
+                                >Checkout
+                            </button>
+                            )
+                        }
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    );
+}
